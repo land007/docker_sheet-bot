@@ -475,6 +475,20 @@ const addRowToEnd = async (accessToken, docId, sheetId, rowData) => {
 	}
 };
 
+/**
+ * 获取当前的年份和月份，并返回数字格式的字符串表示。
+ * @returns {string} 当前年份和月份的数字字符串，例如：202305
+ */
+const getCurrentYearAndMonth = () => {
+  const localTime = new Date();
+  const timezoneOffset = 8 * 60; // 东八区偏移量为8小时
+  const utcTime = new Date(localTime.getTime() + timezoneOffset * 60 * 1000);
+
+  const year = utcTime.getFullYear().toString(); // 获取年份并转换为字符串格式
+  const month = (utcTime.getMonth() + 1).toString().padStart(2, '0'); // 获取月份并补齐两位
+
+  return year + month; // 返回年份和月份的数字字符串
+};
 
 /**
  * 在指定文档中的当前月份工作表的行末尾新增数据
@@ -494,7 +508,8 @@ const addRowToEndWithSheet = async (accessToken, docId, rowData) => {
 
 		// 获取当前月份的工作表
         //const currentMonth = new Date().toLocaleString('default', { month: 'long' });
-        const currentMonth = new Date().toLocaleString('zh-CN', { month: 'long' });
+        //const currentMonth = new Date().toLocaleString('zh-CN', { month: 'long' });
+        const currentMonth = getCurrentYearAndMonth();
 		const currentSheet = properties.find(sheet => sheet.title === currentMonth);
 
 		let sheetId;
